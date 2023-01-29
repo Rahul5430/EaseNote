@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F27649"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,17 +18,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.easenote"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.easenote"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "jsEngine": "hermes"
+    "jsEngine": "hermes",
+    "extra": {
+      "eas": {
+        "projectId": "30edc0d2-0308-4605-8ac7-75b690efa9a0"
+      }
+    }
   }
 }
