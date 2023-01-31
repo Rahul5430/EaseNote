@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SplashLogo from '../assets/customSplash.png';
+import Home from './Home';
 
 const BGColor = '#F27649';
 
@@ -41,7 +42,7 @@ const SplashScreen = () => {
 				Animated.timing(startAnimation, {
 					// For same Height for non safe Area Devices...
 					toValue:
-						-Dimensions.get('window').height + (edges.top + 65),
+						-Dimensions.get('window').height + (edges.top + 50),
 					useNativeDriver: true,
 				}),
 				Animated.timing(scaleLogo, {
@@ -58,7 +59,7 @@ const SplashScreen = () => {
 					// Moving to right most...
 					toValue: {
 						x: Dimensions.get('window').width / 2 - 35,
-						y: Dimensions.get('window').height / 2 - 5,
+						y: Dimensions.get('window').height / 2 - 12.5,
 					},
 					useNativeDriver: true,
 				}),
@@ -66,8 +67,8 @@ const SplashScreen = () => {
 					// Moving to right most...
 					toValue: {
 						x: 0,
-						// Since image size is 100...
-						y: Dimensions.get('window').height / 2 - 90,
+						// Since image size is 150...
+						y: Dimensions.get('window').height / 2 - 110,
 					},
 					useNativeDriver: true,
 				}),
@@ -118,7 +119,7 @@ const SplashScreen = () => {
 					transform: [{ translateY: contentTransition }],
 				}}
 			>
-				<Text>Home</Text>
+				<Home />
 			</Animated.View>
 		</View>
 	);
