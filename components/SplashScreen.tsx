@@ -42,7 +42,7 @@ const SplashScreen = () => {
 				Animated.timing(startAnimation, {
 					// For same Height for non safe Area Devices...
 					toValue:
-						-Dimensions.get('window').height + (edges.top + 50),
+						-Dimensions.get('window').height + (edges.top + 55.5),
 					useNativeDriver: true,
 				}),
 				Animated.timing(scaleLogo, {
@@ -59,7 +59,7 @@ const SplashScreen = () => {
 					// Moving to right most...
 					toValue: {
 						x: Dimensions.get('window').width / 2 - 35,
-						y: Dimensions.get('window').height / 2 - 12.5,
+						y: Dimensions.get('window').height / 2 - 10,
 					},
 					useNativeDriver: true,
 				}),

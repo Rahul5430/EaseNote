@@ -8,7 +8,7 @@ const Home = () => {
 		<View>
 			<ScrollView>
 				<View
-					style={{ ...styles.outerView, paddingTop: edges.top + 50 }}
+					style={{ ...styles.outerView, paddingTop: edges.top + 55.5 }}
 				>
 					<Text>Home</Text>
 				</View>
