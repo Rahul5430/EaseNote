@@ -8,7 +8,10 @@ const Home = () => {
 		<View>
 			<ScrollView>
 				<View
-					style={{ ...styles.outerView, paddingTop: edges.top + 55.5 }}
+					style={{
+						...styles.outerView,
+						paddingTop: edges.top + 55.5,
+					}}
 				>
 					<Text>Home</Text>
 				</View>
@@ -21,7 +24,8 @@ const styles = StyleSheet.create({
 	outerView: {
 		paddingLeft: 15,
 		paddingRight: 15,
-		paddingBottom: 25,
+		paddingBottom: 1000,
+		backgroundColor: '#FFFFFF',
 	},
 });
 
