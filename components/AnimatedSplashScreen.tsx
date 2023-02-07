@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import SplashLogo from '../assets/customSplash.png';
@@ -12,6 +12,8 @@ const BGColor = '#F27649';
 
 const AnimatedSplashScreen = () => {
 	const [appIsReady, setAppIsReady] = useState(false);
+	const { width, height } = useWindowDimensions();
+	console.log({ width, height });
 
 	console.log(appIsReady);
 
@@ -30,9 +32,7 @@ const AnimatedSplashScreen = () => {
 	const moveTitle = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
 	// Animating Content...
-	const contentTransition = useRef(
-		new Animated.Value(Dimensions.get('window').height)
-	).current;
+	const contentTransition = useRef(new Animated.Value(height)).current;
 
 	useEffect(() => {
 		const prepare = async () => {
@@ -57,8 +57,7 @@ const AnimatedSplashScreen = () => {
 			Animated.parallel([
 				Animated.timing(startAnimation, {
 					// For same Height for non safe Area Devices...
-					toValue:
-						-Dimensions.get('window').height + (edges.top + 55.5),
+					toValue: -height + (edges.top + 55.5),
 					useNativeDriver: true,
 				}),
 				Animated.timing(scaleLogo, {
@@ -74,8 +73,8 @@ const AnimatedSplashScreen = () => {
 				Animated.timing(moveLogo, {
 					// Moving to right most...
 					toValue: {
-						x: Dimensions.get('window').width / 2 - 35,
-						y: Dimensions.get('window').height / 2 - 10,
+						x: width / 2 - 35,
+						y: height / 2 - 10,
 					},
 					useNativeDriver: true,
 				}),
@@ -84,7 +83,7 @@ const AnimatedSplashScreen = () => {
 					toValue: {
 						x: 0,
 						// Since image size is 150...
-						y: Dimensions.get('window').height / 2 - 110,
+						y: height / 2 - 110,
 					},
 					useNativeDriver: true,
 				}),

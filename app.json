@@ -3,7 +3,7 @@
     "name": "EaseNote",
     "slug": "EaseNote",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "backgroundColor": "#F27649",

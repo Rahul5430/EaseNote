@@ -1,9 +1,15 @@
-import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	useWindowDimensions,
+	View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Home = () => {
 	const edges = useSafeAreaInsets();
-	const {height, width} = useWindowDimensions();
+	const { height, width } = useWindowDimensions();
 
 	return (
 		<View>
