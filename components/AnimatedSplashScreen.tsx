@@ -13,9 +13,8 @@ const BGColor = '#F27649';
 const AnimatedSplashScreen = () => {
 	const [appIsReady, setAppIsReady] = useState(false);
 	const { width, height } = useWindowDimensions();
-	console.log({ width, height });
 
-	console.log(appIsReady);
+	__DEV__ && console.log(appIsReady);
 
 	// SafeArea Value...
 	const edges = useSafeAreaInsets();
@@ -93,15 +92,10 @@ const AnimatedSplashScreen = () => {
 				}),
 			]).start();
 		}, 500);
-	}, []);
+	}, [height, width]);
 
 	const onLayoutRootView = useCallback(async () => {
 		if (appIsReady) {
-			// This tells the splash screen to hide immediately! If we call this after
-			// `setAppIsReady`, then we may see a blank screen while the app is
-			// loading its initial state and rendering its first pixels. So instead,
-			// we hide the splash screen once we know the root view has already
-			// performed layout.
 			await SplashScreen.hideAsync();
 		}
 	}, [appIsReady]);
