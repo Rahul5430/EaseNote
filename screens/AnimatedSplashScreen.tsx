@@ -151,6 +151,7 @@ const AnimatedSplashScreen = () => {
 
 const styles = StyleSheet.create({
 	outsideView: {
+		backgroundColor: '#F27649',
 		position: 'absolute',
 		top: 0,
 		bottom: 0,
