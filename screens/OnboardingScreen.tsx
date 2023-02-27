@@ -6,7 +6,6 @@ import {
 	View,
 	Text,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import SplashLogo from '../assets/customSplash.png';
 import FadeInView from '../components/FadeInView';
@@ -22,9 +21,6 @@ const OnboardingScreen = () => {
 	const { width, height } = useWindowDimensions();
 
 	__DEV__ && console.log(appIsReady);
-
-	// SafeArea Value...
-	const edges = useSafeAreaInsets();
 
 	// Animation Values...
 	const startAnimation = useRef(new Animated.Value(0)).current;

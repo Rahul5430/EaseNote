@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect, useRef } from 'react';
-import { Animated, ViewStyle } from 'react-native';
+import { Animated } from 'react-native';
 
-type FadeInViewProps = PropsWithChildren<{ style: ViewStyle }>;
+type FadeInViewProps = PropsWithChildren<{}>;
 
 const FadeInView: React.FC<FadeInViewProps> = (props) => {
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -15,7 +15,7 @@ const FadeInView: React.FC<FadeInViewProps> = (props) => {
 	}, [fadeAnim]);
 
 	return (
-		<Animated.View style={{ ...props.style, opacity: fadeAnim }} {...props}>
+		<Animated.View style={{ opacity: fadeAnim }} {...props}>
 			{props.children}
 		</Animated.View>
 	);
