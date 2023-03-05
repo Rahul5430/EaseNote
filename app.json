@@ -1,42 +1,54 @@
 {
-  "expo": {
-    "name": "EaseNote",
-    "slug": "EaseNote",
-    "version": "1.0.0",
-    "orientation": "default",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "backgroundColor": "#F27649",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F27649"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.easenote"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#F27649"
-      },
-      "package": "com.easenote"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "jsEngine": "hermes",
-    "extra": {
-      "eas": {
-        "projectId": "30edc0d2-0308-4605-8ac7-75b690efa9a0"
-      }
-    }
-  }
+	"expo": {
+		"name": "EaseNote",
+		"slug": "EaseNote",
+		"scheme": "easenote",
+		"version": "1.0.0",
+		"orientation": "default",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "light",
+		"backgroundColor": "#F27649",
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#F27649"
+		},
+		"plugins": [
+			"@react-native-google-signin/google-signin",
+			"@react-native-firebase/app",
+			"@react-native-firebase/auth",
+			[
+				"expo-build-properties",
+				{
+					"ios": {
+						"useFrameworks": "static"
+					}
+				}
+			]
+		],
+		"updates": {
+			"fallbackToCacheTimeout": 0
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true,
+			"bundleIdentifier": "com.easenote"
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptive-icon.png",
+				"backgroundColor": "#F27649"
+			},
+			"package": "com.easenote"
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"jsEngine": "hermes",
+		"extra": {
+			"eas": {
+				"projectId": "30edc0d2-0308-4605-8ac7-75b690efa9a0"
+			}
+		}
+	}
 }
