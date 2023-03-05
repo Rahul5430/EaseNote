@@ -39,6 +39,7 @@
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#F27649"
 			},
+			"googleServicesFile": "./google-services.json",
 			"package": "com.easenote"
 		},
 		"web": {
