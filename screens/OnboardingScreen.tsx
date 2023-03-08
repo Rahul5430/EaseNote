@@ -1,22 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-	Animated,
-	StyleSheet,
-	useWindowDimensions,
-	View,
-	Text,
-} from 'react-native';
+import { Animated, StyleSheet, useWindowDimensions, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import SplashLogo from '../assets/customSplash.png';
 import FadeInView from '../components/FadeInView';
 import { Button } from 'react-native-paper';
+import {
+	GoogleSignin,
+	GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+
+interface OnboardingScreenProps {
+	setUser: ({}) => void;
+}
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 const BGColor = '#F27649';
 
-const OnboardingScreen = () => {
+const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
+	GoogleSignin.configure({
+		webClientId:
+			'277543865694-qhv8k2f66c4eg9d5as1t9621r4rep1co.apps.googleusercontent.com',
+	});
 	const [appIsReady, setAppIsReady] = useState(false);
 	const { width, height } = useWindowDimensions();
 
@@ -103,6 +110,40 @@ const OnboardingScreen = () => {
 		}
 	}, [appIsReady]);
 
+	const signInWithGoogle = async () => {
+		try {
+			// Check if your device supports Google Play
+			await GoogleSignin.hasPlayServices({
+				showPlayServicesUpdateDialog: true,
+			});
+			// Get the users ID token
+			const { idToken } = await GoogleSignin.signIn();
+			console.log('### IDTOKEN: ', idToken);
+
+			// Create a Google credential with the token
+			const googleCredential =
+				auth.GoogleAuthProvider.credential(idToken);
+
+			__DEV__ && console.log('Pressed Connect with Google');
+
+			return auth().signInWithCredential(googleCredential);
+		} catch (error) {
+			console.error('### Error: ', error);
+		}
+	};
+
+	const onAuthStateChanged = async (user: {}) => {
+		console.log('@@@ USER: ', user);
+		if (user) {
+			setUser(user);
+		}
+	};
+
+	useEffect(() => {
+		const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+		return subscriber; // unsubscribe on unmount
+	}, []);
+
 	if (!appIsReady) {
 		return null;
 	}
@@ -155,11 +196,19 @@ const OnboardingScreen = () => {
 						height: height / 2,
 					}}
 				>
-					<FadeInView>
-						<Button mode='contained' dark>
+					{/* <FadeInView> */}
+					{/* <Button
+							mode='contained'
+							dark
+							onPress={() => signInWithGoogle()}
+						>
 							LOGIN
-						</Button>
-					</FadeInView>
+						</Button> */}
+					<GoogleSigninButton
+						onPress={() => signInWithGoogle()}
+						color={GoogleSigninButton.Color.Dark}
+					/>
+					{/* </FadeInView> */}
 				</Animated.View>
 			</Animated.View>
 		</View>

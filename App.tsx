@@ -11,7 +11,11 @@ export default function App() {
 	return (
 		<SafeAreaProvider>
 			<PaperProvider>
-				{!user ? <OnboardingScreen /> : <AnimatedSplashScreen />}
+				{!user ? (
+					<OnboardingScreen setUser={setUser} />
+				) : (
+					<AnimatedSplashScreen setUser={setUser} />
+				)}
 			</PaperProvider>
 		</SafeAreaProvider>
 	);

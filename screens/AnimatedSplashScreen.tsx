@@ -5,12 +5,16 @@ import * as SplashScreen from 'expo-splash-screen';
 import SplashLogo from '../assets/customSplash.png';
 import Home from './Home';
 
+interface AnimatedSplashScreenProps {
+	setUser: ({}) => void;
+}
+
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 const BGColor = '#F27649';
 
-const AnimatedSplashScreen = () => {
+const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 	const [appIsReady, setAppIsReady] = useState(false);
 	const { width, height } = useWindowDimensions();
 
@@ -56,7 +60,7 @@ const AnimatedSplashScreen = () => {
 			Animated.parallel([
 				Animated.timing(startAnimation, {
 					// For same Height for non safe Area Devices...
-					toValue: -height + (edges.top + 55.5),
+					toValue: -height + (edges.top + 80.5),
 					useNativeDriver: true,
 				}),
 				Animated.timing(scaleLogo, {
@@ -73,7 +77,7 @@ const AnimatedSplashScreen = () => {
 					// Moving to right most...
 					toValue: {
 						x: width / 2 - 35,
-						y: height / 2 - 10,
+						y: height / 2 - 25,
 					},
 					useNativeDriver: true,
 				}),
@@ -82,7 +86,7 @@ const AnimatedSplashScreen = () => {
 					toValue: {
 						x: 0,
 						// Since image size is 150...
-						y: height / 2 - 110,
+						y: height / 2 - 117.5,
 					},
 					useNativeDriver: true,
 				}),
@@ -143,7 +147,7 @@ const AnimatedSplashScreen = () => {
 					transform: [{ translateY: contentTransition }],
 				}}
 			>
-				<Home />
+				<Home setUser={setUser} />
 			</Animated.View>
 		</View>
 	);
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
 	imageView: {
 		width: 150,
 		height: 150,
-		marginBottom: 10,
+		// marginBottom: 10,
 	},
 	textView: {
 		fontSize: 25,
