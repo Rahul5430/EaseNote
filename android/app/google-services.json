@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "277543865694",
+    "project_id": "easenote-f0e3d",
+    "storage_bucket": "easenote-f0e3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277543865694:android:2d01cf9c53e5c0fbc8d3cf",
+        "android_client_info": {
+          "package_name": "com.easenote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277543865694-t6p1hchsbdt7cnbac2jgp8rrg10vq5s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easenote",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "277543865694-ohns1g76ag2th2r2nrc7iu0obfk74vqk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzl-EsG5QtEjfJC79lnN4CV9keMjMmZTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277543865694-ohns1g76ag2th2r2nrc7iu0obfk74vqk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
