@@ -1,10 +1,11 @@
 import React, {
-	PropsWithChildren,
 	createContext,
+	PropsWithChildren,
 	useContext,
 	useMemo,
 } from 'react';
 import { ImageStyle, TextStyle, useColorScheme, ViewStyle } from 'react-native';
+
 import { darkTheme, defaultTheme } from './defaultTheme';
 
 export type ColorScheme = 'light' | 'dark';

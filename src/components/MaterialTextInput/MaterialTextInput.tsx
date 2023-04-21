@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
 	useCallback,
 	useEffect,
@@ -19,16 +20,11 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import MaterialText from './MaterialText';
-import { useStyles } from './hooks/use-styles';
-import { colors } from '../../themes';
-import { RFValue } from '../../helpers/responsiveFontSize';
 
-type leadingAndTrailing =
-	| React.ReactNode
-	| ((props: { color: string; size: number }) => React.ReactNode | null)
-	| any
-	| null;
+import { RFValue } from '../../helpers/responsiveFontSize';
+import { colors } from '../../themes';
+import { useStyles } from './hooks/use-styles';
+import MaterialText from './MaterialText';
 
 export interface MaterialTextInputProps extends RNTextInputProps {
 	/**
@@ -53,12 +49,18 @@ export interface MaterialTextInputProps extends RNTextInputProps {
 	/**
 	 * The element placed before the text input.
 	 */
-	leading?: leadingAndTrailing;
+	leading?:
+		| React.ReactNode
+		| ((props: { color: string; size: number }) => React.ReactNode | null)
+		| null;
 
 	/**
 	 * The element placed after the text input.
 	 */
-	trailing?: leadingAndTrailing;
+	trailing?:
+		| React.ReactNode
+		| ((props: { color: string; size: number }) => React.ReactNode | null)
+		| null;
 
 	/**
 	 * The color of the text input's content (e.g. label, icons, selection).
@@ -112,6 +114,11 @@ export interface MaterialTextInputProps extends RNTextInputProps {
 	inputStyle?: RNTextInputProps['style'];
 
 	/**
+	 * The style of the text input's label element container.
+	 */
+	labelContainerStyle?: StyleProp<ViewStyle>;
+
+	/**
 	 * The style of the text input's leading element container.
 	 */
 	leadingContainerStyle?: StyleProp<ViewStyle>;
@@ -139,6 +146,7 @@ const MaterialTextInput = React.forwardRef(
 			style,
 			inputContainerStyle,
 			inputStyle,
+			labelContainerStyle,
 			leadingContainerStyle,
 			trailingContainerStyle,
 			placeholder,
@@ -148,6 +156,16 @@ const MaterialTextInput = React.forwardRef(
 		}: MaterialTextInputProps,
 		ref
 	) => {
+		const leadingNode =
+			typeof leading === 'function'
+				? leading({ color: '#949494', size: 24 })
+				: leading;
+
+		const trailingNode =
+			typeof trailing === 'function'
+				? trailing({ color: '#949494', size: 24 })
+				: trailing;
+
 		const [hovered, setHovered] = useState(false);
 
 		const handleMouseEnter = useCallback(
@@ -209,7 +227,7 @@ const MaterialTextInput = React.forwardRef(
 			Animated.timing(activeAnimation, {
 				toValue: active ? 1 : 0,
 				duration: 200,
-				easing: Easing.ease,
+				easing: Easing.out(Easing.ease),
 				useNativeDriver: false,
 			}).start();
 		}, [active]);
@@ -222,9 +240,17 @@ const MaterialTextInput = React.forwardRef(
 				},
 				input: {
 					flex: 1,
-					minHeight: 56,
-					paddingStart: leading ? 12 : 16,
-					paddingEnd: trailing ? 10 : 16,
+					minHeight: variant === 'standard' ? 48 : 56,
+					paddingStart: leadingNode
+						? 12
+						: variant === 'standard'
+						? 0
+						: 16,
+					paddingEnd: trailingNode
+						? 10
+						: variant === 'standard'
+						? 0
+						: 16,
 					color: colors.black,
 				},
 				leading: {
@@ -232,16 +258,16 @@ const MaterialTextInput = React.forwardRef(
 					alignItems: 'center',
 					width: 24,
 					height: 24,
-					marginStart: 12,
-					marginVertical: 16,
+					marginStart: variant === 'standard' ? 0 : 12,
+					marginVertical: variant === 'standard' ? 12 : 16,
 				},
 				trailing: {
 					justifyContent: 'center',
 					alignItems: 'center',
 					height: 24,
 					marginStart: 0,
-					marginEnd: 16,
-					marginVertical: 16,
+					marginEnd: variant === 'standard' ? 0 : 16,
+					marginVertical: variant === 'standard' ? 12 : 16,
 				},
 				underline: {
 					position: 'absolute',
@@ -283,8 +309,21 @@ const MaterialTextInput = React.forwardRef(
 					justifyContent: 'center',
 					position: 'absolute',
 					top: 0,
-					start: leading ? 48 : 16,
-					height: 56,
+					start:
+						variant === 'standard'
+							? leadingNode
+								? leadingContainerStyle &&
+								  // @ts-ignore
+								  typeof leadingContainerStyle.width ===
+										'number'
+									? // @ts-ignore
+									  leadingContainerStyle.width + 12
+									: 36
+								: 0
+							: leadingNode
+							? 48
+							: 16,
+					height: variant === 'standard' ? 48 : 56,
 				},
 				helperText: {
 					color: colors.darkRed,
@@ -293,7 +332,7 @@ const MaterialTextInput = React.forwardRef(
 					flexDirection: 'row',
 				},
 			}),
-			[!!leading, !!trailing, variant, focused, hovered]
+			[!!leadingNode, !!trailingNode, variant, focused, hovered]
 		);
 
 		const shake = useRef(new Animated.Value(0.5)).current;
@@ -371,17 +410,21 @@ const MaterialTextInput = React.forwardRef(
 					style={[
 						styles.inputContainer,
 						variant !== 'standard' && {
-							borderTopStartRadius: 50,
-							borderTopEndRadius: 50,
-							borderBottomStartRadius: 50,
-							borderBottomEndRadius: 50,
+							borderTopStartRadius: 10,
+							borderTopEndRadius: 10,
+							borderBottomStartRadius: 10,
+							borderBottomEndRadius: 10,
+						},
+						variant === 'filled' && {
+							borderBottomStartRadius: 0,
+							borderBottomEndRadius: 0,
 						},
 						inputContainerStyle,
 					]}
 				>
-					{leading && (
+					{leadingNode && (
 						<View style={[styles.leading, leadingContainerStyle]}>
-							{leading}
+							{leadingNode}
 						</View>
 					)}
 
@@ -392,10 +435,11 @@ const MaterialTextInput = React.forwardRef(
 							{
 								fontSize: RFValue(16),
 								letterSpacing: 0.15,
-								paddingTop:
-									variant === 'filled' && label ? 18 : 0,
-								fontFamily: 'Ovo',
 							},
+							variant === 'filled' &&
+								label && {
+									paddingTop: 18,
+								},
 							inputStyle,
 						]}
 						placeholder={
@@ -416,9 +460,9 @@ const MaterialTextInput = React.forwardRef(
 						} as any)}
 					/>
 
-					{trailing && (
+					{trailingNode && (
 						<View style={[styles.trailing, trailingContainerStyle]}>
-							{trailing}
+							{trailingNode}
 						</View>
 					)}
 
@@ -431,7 +475,11 @@ const MaterialTextInput = React.forwardRef(
 							<Animated.View
 								style={[
 									styles.underlineFocused,
-									{ transform: [{ scaleX: focusAnimation }] },
+									{
+										transform: [
+											{ scaleX: activeAnimation },
+										],
+									},
 								]}
 								pointerEvents='none'
 							/>
@@ -443,10 +491,10 @@ const MaterialTextInput = React.forwardRef(
 							style={[
 								StyleSheet.absoluteFill,
 								{
-									borderTopStartRadius: 5,
-									borderTopEndRadius: 5,
-									borderBottomStartRadius: 5,
-									borderBottomEndRadius: 5,
+									borderTopStartRadius: 10,
+									borderTopEndRadius: 10,
+									borderBottomStartRadius: 10,
+									borderBottomEndRadius: 10,
 								},
 								rest.multiline && {
 									borderTopStartRadius: 40,
@@ -462,7 +510,7 @@ const MaterialTextInput = React.forwardRef(
 
 					{!!label && (
 						<View
-							style={[styles.labelContainer]}
+							style={[styles.labelContainer, labelContainerStyle]}
 							pointerEvents='none'
 						>
 							{variant === 'outlined' && (
@@ -482,7 +530,6 @@ const MaterialTextInput = React.forwardRef(
 									{
 										fontSize: RFValue(16),
 										letterSpacing: 0.15,
-										fontFamily: 'Ovo',
 									},
 									{
 										color: activeAnimation.interpolate({
@@ -519,8 +566,12 @@ const MaterialTextInput = React.forwardRef(
 													),
 											},
 										],
-										backgroundColor: variant === 'outlined' ? colors.skin : 'transparent',
-										paddingLeft: variant === 'outlined' ? 2 : 0,
+										backgroundColor:
+											variant === 'outlined'
+												? colors.white
+												: 'transparent',
+										paddingLeft:
+											variant === 'outlined' ? 2 : 0,
 									},
 								]}
 							>
@@ -529,7 +580,7 @@ const MaterialTextInput = React.forwardRef(
 									<Animated.Text
 										style={{
 											color: colors.golden,
-											fontSize: RFValue(16),
+											fontSize: RFValue(18),
 										}}
 									>
 										*

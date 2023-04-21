@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { NavigationContainer } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import SplashScreen from 'react-native-splash-screen';
+
 import AnimatedSplashScreen from './src/screens/AnimatedSplashScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 export default function App() {
 	const [user, setUser] = useState<FirebaseAuthTypes.User | null>();
 
+	useEffect(() => {
+		SplashScreen.hide();
+	}, []);
+
 	return (
-		<SafeAreaProvider>
+		<NavigationContainer>
 			<PaperProvider>
 				{!user ? (
 					<OnboardingScreen setUser={setUser} />
@@ -17,6 +23,6 @@ export default function App() {
 					<AnimatedSplashScreen setUser={setUser} />
 				)}
 			</PaperProvider>
-		</SafeAreaProvider>
+		</NavigationContainer>
 	);
 }

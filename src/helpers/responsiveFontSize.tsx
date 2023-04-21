@@ -1,5 +1,6 @@
+import { Dimensions, Platform, StatusBar } from 'react-native';
+
 import { isIphoneX } from './utils';
-import { Platform, StatusBar, Dimensions } from 'react-native';
 
 export const RFPercentage = (percent: number) => {
 	const { height, width } = Dimensions.get('window');

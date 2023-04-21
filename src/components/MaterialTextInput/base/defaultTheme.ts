@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+
 import type { Theme } from './ThemeContext';
 
 export const defaultTheme: Theme = {

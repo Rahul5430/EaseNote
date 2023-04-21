@@ -3,6 +3,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 
+#import "RNSplashScreen.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -14,6 +15,7 @@
   self.initialProps = @{};
 
   bool didFinish = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  [RNSplashScreen show];
   return didFinish;
 }
 

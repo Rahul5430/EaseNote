@@ -1,25 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as SplashScreen from 'expo-splash-screen';
+
 import SplashLogo from '../assets/images/customSplash.png';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import Home from './Home';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 interface AnimatedSplashScreenProps {
 	setUser: (user: FirebaseAuthTypes.User | null) => void;
 }
 
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
-
 const BGColor = '#F27649';
 
 const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
-	const [appIsReady, setAppIsReady] = useState(false);
 	const { width, height } = useWindowDimensions();
-
-	__DEV__ && console.log(appIsReady);
 
 	// SafeArea Value...
 	const edges = useSafeAreaInsets();
@@ -38,79 +33,57 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 	// Animating Content...
 	const contentTransition = useRef(new Animated.Value(height)).current;
 
-	useEffect(() => {
-		const prepare = async () => {
-			try {
-				await new Promise((resolve) => setTimeout(resolve, 500));
-			} catch (e) {
-				console.warn(e);
-			} finally {
-				// Tell the application to render
-				setAppIsReady(true);
-			}
-		};
-
-		prepare();
-	}, []);
-
 	// Animation Done....
 	useEffect(() => {
-		// Starting Animation after 500ms...
-		setTimeout(() => {
-			// Parallel Animation...
-			Animated.parallel([
-				Animated.timing(startAnimation, {
-					// For same Height for non safe Area Devices...
-					toValue: -height + (edges.top + 80.5),
-					useNativeDriver: true,
-				}),
-				Animated.timing(scaleLogo, {
-					// Scaling to 0.35
-					toValue: 0.3,
-					useNativeDriver: true,
-				}),
-				Animated.timing(scaleTitle, {
-					// Scaling to 0.8
-					toValue: 0.8,
-					useNativeDriver: true,
-				}),
-				Animated.timing(moveLogo, {
-					// Moving to right most...
-					toValue: {
-						x: width / 2 - 35,
-						y: height / 2 - 25,
-					},
-					useNativeDriver: true,
-				}),
-				Animated.timing(moveTitle, {
-					// Moving to right most...
-					toValue: {
-						x: 0,
-						// Since image size is 150...
-						y: height / 2 - 117.5,
-					},
-					useNativeDriver: true,
-				}),
-				Animated.timing(contentTransition, {
-					toValue: 0,
-					useNativeDriver: true,
-				}),
-			]).start();
-		}, 500);
+		// Parallel Animation...
+		Animated.parallel([
+			Animated.timing(startAnimation, {
+				// For same Height for non safe Area Devices...
+				toValue: -height + (edges.top + 80.5),
+				useNativeDriver: true,
+			}),
+			Animated.timing(scaleLogo, {
+				// Scaling to 0.35
+				toValue: 0.3,
+				useNativeDriver: true,
+			}),
+			Animated.timing(scaleTitle, {
+				// Scaling to 0.8
+				toValue: 0.8,
+				useNativeDriver: true,
+			}),
+			Animated.timing(moveLogo, {
+				// Moving to right most...
+				toValue: {
+					x: width / 2 - 35,
+					y: height / 2 - 25,
+				},
+				useNativeDriver: true,
+			}),
+			Animated.timing(moveTitle, {
+				// Moving to right most...
+				toValue: {
+					x: 0,
+					// Since image size is 150...
+					y: height / 2 - 117.5,
+				},
+				useNativeDriver: true,
+			}),
+			Animated.timing(contentTransition, {
+				toValue: 0,
+				useNativeDriver: true,
+			}),
+		]).start();
 	}, [height, width]);
 
-	const onLayoutRootView = useCallback(async () => {
-		if (appIsReady) {
-			await SplashScreen.hideAsync();
-		}
-	}, [appIsReady]);
-
-	if (!appIsReady) {
-		return null;
-	}
-
 	return (
-		<View style={styles.outsideView} onLayout={onLayoutRootView}>
+		<View style={styles.outsideView}>
+			<FocusAwareStatusBar
+				barStyle='dark-content'
+				translucent={true}
+				backgroundColor={'transparent'}
+				hidden={false}
+			/>
 			<Animated.View
 				style={{
 					...styles.splashView,

@@ -1,12 +1,9 @@
-import {
-	ScrollView,
-	StyleSheet,
-	useWindowDimensions,
-	View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from 'react-native-paper';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { getWidthnHeight } from '../helpers/responsiveFontSize';
 
 interface HomeScreenProps {
 	setUser: (user: FirebaseAuthTypes.User | null) => void;
@@ -14,7 +11,6 @@ interface HomeScreenProps {
 
 const Home = ({ setUser }: HomeScreenProps) => {
 	const edges = useSafeAreaInsets();
-	const { height, width } = useWindowDimensions();
 
 	const logout = () => {
 		auth()
@@ -35,7 +31,7 @@ const Home = ({ setUser }: HomeScreenProps) => {
 					style={{
 						...styles.outerView,
 						paddingTop: edges.top + 55.5,
-						height: height,
+						height: getWidthnHeight().height,
 					}}
 				>
 					<Button mode='contained' onPress={logout}>

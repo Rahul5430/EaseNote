@@ -1,6 +1,7 @@
 import { DependencyList, useMemo } from 'react';
 import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
 import { SpacingFunc, useSpacingFunc } from 'react-native-flex-layout';
+
 import { Theme, useTheme } from '../base/ThemeContext';
 
 type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };

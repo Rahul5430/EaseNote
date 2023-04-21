@@ -1,46 +1,41 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Animated,
-	StyleSheet,
-	useWindowDimensions,
-	View,
-	Text,
 	Image,
 	KeyboardAvoidingView,
-	ScrollView,
 	Platform,
+	ScrollView,
+	StyleSheet,
+	Text,
+	useWindowDimensions,
+	View,
 } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
-import SplashLogo from '../assets/images/customSplash.png';
 import { Button, Divider } from 'react-native-paper';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { getWidthnHeight } from '../helpers/responsiveFontSize';
+
+import SplashLogo from '../assets/images/customSplash.png';
+import GoogleLogo from '../assets/images/google.png';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import MaterialTextInput from '../components/MaterialTextInput/MaterialTextInput';
+import { getWidthnHeight } from '../helpers/responsiveFontSize';
 import { validateEmail } from '../helpers/utils';
 import { colors } from '../themes';
-import GoogleLogo from '../assets/images/google.png';
 
 interface OnboardingScreenProps {
 	setUser: (user: FirebaseAuthTypes.User | null) => void;
 }
 
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
-
 const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
 	GoogleSignin.configure({
-		webClientId:
-			'277543865694-qhv8k2f66c4eg9d5as1t9621r4rep1co.apps.googleusercontent.com',
+		webClientId: GOOGLE_WEB_CLIENT_ID,
 	});
 
 	const [email, setEmail] = useState('');
 	const [emailError, setEmailError] = useState('');
 
-	const [appIsReady, setAppIsReady] = useState(false);
 	const { width, height } = useWindowDimensions();
-
-	__DEV__ && console.log(appIsReady);
 
 	// Scaling down both logo and title...
 	const scaleLogo = useRef(new Animated.Value(1)).current;
@@ -56,72 +51,48 @@ const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
 	// Animating Height...
 	const animatedHeight = useRef(new Animated.Value(height)).current;
 
-	useEffect(() => {
-		const prepare = async () => {
-			try {
-				await new Promise((resolve) => setTimeout(resolve, 500));
-			} catch (e) {
-				console.warn(e);
-			} finally {
-				// Tell the application to render
-				setAppIsReady(true);
-			}
-		};
-
-		prepare();
-	}, []);
-
 	// Animation Done....
 	useEffect(() => {
-		// Starting Animation after 500ms...
-		setTimeout(() => {
-			// Parallel Animation...
-			Animated.parallel([
-				Animated.timing(animatedHeight, {
-					// For same Height for non safe Area Devices...
-					toValue: height / 2,
-					useNativeDriver: false,
-				}),
-				Animated.timing(scaleLogo, {
-					// Scaling to 0.35
-					toValue: 1,
-					useNativeDriver: false,
-				}),
-				Animated.timing(scaleTitle, {
-					// Scaling to 0.8
-					toValue: 1,
-					useNativeDriver: false,
-				}),
-				Animated.timing(moveLogo, {
-					// Moving to right most...
-					toValue: {
-						x: 0,
-						y: height / 12,
-					},
-					useNativeDriver: false,
-				}),
-				Animated.timing(moveTitle, {
-					// Moving to right most...
-					toValue: {
-						x: 0,
-						// Since image size is 150...
-						y: height / 12,
-					},
-					useNativeDriver: false,
-				}),
-				Animated.timing(contentTransition, {
-					toValue: 0,
-					useNativeDriver: false,
-				}),
-			]).start();
-		}, 500);
+		// Parallel Animation...
+		Animated.parallel([
+			Animated.timing(animatedHeight, {
+				// For same Height for non safe Area Devices...
+				toValue: height / 2,
+				useNativeDriver: false,
+			}),
+			Animated.timing(scaleLogo, {
+				// Scaling to 0.35
+				toValue: 1,
+				useNativeDriver: false,
+			}),
+			Animated.timing(scaleTitle, {
+				// Scaling to 0.8
+				toValue: 1,
+				useNativeDriver: false,
+			}),
+			Animated.timing(moveLogo, {
+				// Moving to right most...
+				toValue: {
+					x: 0,
+					y: height / 12,
+				},
+				useNativeDriver: false,
+			}),
+			Animated.timing(moveTitle, {
+				// Moving to right most...
+				toValue: {
+					x: 0,
+					// Since image size is 150...
+					y: height / 12,
+				},
+				useNativeDriver: false,
+			}),
+			Animated.timing(contentTransition, {
+				toValue: 0,
+				useNativeDriver: false,
+			}),
+		]).start();
 	}, [height, width]);
-
-	const onLayoutRootView = useCallback(async () => {
-		if (appIsReady) {
-			await SplashScreen.hideAsync();
-		}
-	}, [appIsReady]);
 
 	const signInWithGoogle = async () => {
 		try {
@@ -145,7 +116,7 @@ const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
 		}
 	};
 
-	const onAuthStateChanged = async (user: {}) => {
+	const onAuthStateChanged = async (user: FirebaseAuthTypes.User | null) => {
 		console.log('@@@ USER: ', user);
 		if (user) {
 			setUser(user);
@@ -157,12 +128,14 @@ const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
 		return subscriber; // unsubscribe on unmount
 	}, []);
 
-	if (!appIsReady) {
-		return null;
-	}
-
 	return (
-		<View onLayout={onLayoutRootView}>
+		<View>
+			<FocusAwareStatusBar
+				barStyle='dark-content'
+				translucent={true}
+				backgroundColor={'transparent'}
+				hidden={false}
+			/>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
@@ -289,6 +262,8 @@ const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
 										style={{
 											paddingHorizontal:
 												getWidthnHeight(3).width,
+											color: 'black',
+											fontSize: getWidthnHeight(4).width,
 										}}
 									>
 										OR
@@ -350,9 +325,10 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	textView: {
-		fontSize: 25,
+		fontSize: getWidthnHeight(6.365).width,
 		fontWeight: 'bold',
 		textAlign: 'center',
+		color: 'black',
 	},
 	secondAnimatedView: {
 		backgroundColor: 'transparent',
@@ -367,10 +343,12 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		fontSize: getWidthnHeight(5).width,
 		textAlign: 'center',
+		color: 'black',
 	},
 	subHeading: {
 		fontSize: getWidthnHeight(4).width,
 		textAlign: 'center',
+		color: 'black',
 		padding: getWidthnHeight(2).width,
 	},
 	googleSignin: {
