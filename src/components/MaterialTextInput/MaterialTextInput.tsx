@@ -439,6 +439,7 @@ const MaterialTextInput = React.forwardRef(
 							variant === 'filled' &&
 								label && {
 									paddingTop: 18,
+									paddingBottom: 0,
 								},
 							inputStyle,
 						]}

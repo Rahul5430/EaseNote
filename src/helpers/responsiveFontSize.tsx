@@ -1,6 +1,6 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
 
-import { isIphoneX } from './utils';
+import { isIphoneX, isLandscape, isPortrait } from './utils';
 
 export const RFPercentage = (percent: number) => {
 	const { height, width } = Dimensions.get('window');
@@ -51,6 +51,16 @@ export const getWidthnHeight = (
 		width: (width * screenWidth) / 100,
 		height: (height * screenHeight) / 100,
 	};
+};
+
+export const responsiveFontSize = (fontSize: number) => {
+	if (isPortrait()) {
+		const percent = (fontSize * 100) / getWidthnHeight().width;
+		return getWidthnHeight(percent).width;
+	} else {
+		const percent = (fontSize * 100) / getWidthnHeight().height;
+		return getWidthnHeight(percent, percent).height;
+	}
 };
 
 export const getMarginLeft = (margin: number) => {

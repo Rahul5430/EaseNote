@@ -5,19 +5,22 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import SplashLogo from '../assets/images/customSplash.png';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
+import {
+	getWidthnHeight,
+	responsiveFontSize,
+} from '../helpers/responsiveFontSize';
+import { colors } from '../themes';
 import Home from './Home';
 
 interface AnimatedSplashScreenProps {
 	setUser: (user: FirebaseAuthTypes.User | null) => void;
 }
 
-const BGColor = '#F27649';
-
 const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 	const { width, height } = useWindowDimensions();
 
 	// SafeArea Value...
-	const edges = useSafeAreaInsets();
+	const { top, bottom, right, left } = useSafeAreaInsets();
 
 	// Animation Values...
 	const startAnimation = useRef(new Animated.Value(0)).current;
@@ -39,11 +42,11 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 		Animated.parallel([
 			Animated.timing(startAnimation, {
 				// For same Height for non safe Area Devices...
-				toValue: -height + (edges.top + 80.5),
+				toValue: -height + (top + 60), // imageSize: 45, paddingVertical: 7.5
 				useNativeDriver: true,
 			}),
 			Animated.timing(scaleLogo, {
-				// Scaling to 0.35
+				// Scaling to 0.3
 				toValue: 0.3,
 				useNativeDriver: true,
 			}),
@@ -55,8 +58,10 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 			Animated.timing(moveLogo, {
 				// Moving to right most...
 				toValue: {
-					x: width / 2 - 35,
-					y: height / 2 - 25,
+					x: width / 2 - (35 + right),
+					y:
+						height / 2 -
+						(top > 0 && (right > 0 || left > 0) ? 22.5 : 16.75),
 				},
 				useNativeDriver: true,
 			}),
@@ -65,7 +70,11 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 				toValue: {
 					x: 0,
 					// Since image size is 150...
-					y: height / 2 - 117.5,
+					y:
+						height / 2 -
+						150 +
+						getWidthnHeight(6.36).width / 2 +
+						(top > 0 && width < height ? 25 : 15),
 				},
 				useNativeDriver: true,
 			}),
@@ -74,7 +83,7 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 				useNativeDriver: true,
 			}),
 		]).start();
-	}, [height, width]);
+	}, [height, width, top, bottom, right, left]);
 
 	return (
 		<View style={styles.outsideView}>
@@ -85,41 +94,45 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 				hidden={false}
 			/>
 			<Animated.View
-				style={{
-					...styles.splashView,
-					transform: [{ translateY: startAnimation }],
-				}}
+				style={[
+					styles.splashView,
+					{ transform: [{ translateY: startAnimation }] },
+				]}
 			>
 				<Animated.View style={styles.animatedView}>
 					<Animated.Image
 						source={SplashLogo}
-						style={{
-							...styles.imageView,
-							transform: [
-								{ translateX: moveLogo.x },
-								{ translateY: moveLogo.y },
-								{ scale: scaleLogo },
-							],
-						}}
+						style={[
+							styles.imageView,
+							{
+								transform: [
+									{ translateX: moveLogo.x },
+									{ translateY: moveLogo.y },
+									{ scale: scaleLogo },
+								],
+							},
+						]}
 					/>
 					<Animated.Text
-						style={{
-							...styles.textView,
-							transform: [
-								{ translateY: moveTitle.y },
-								{ scale: scaleTitle },
-							],
-						}}
+						style={[
+							styles.textView,
+							{
+								transform: [
+									{ translateY: moveTitle.y },
+									{ scale: scaleTitle },
+								],
+							},
+						]}
 					>
 						EaseNote
 					</Animated.Text>
 				</Animated.View>
 			</Animated.View>
 			<Animated.View
-				style={{
-					...styles.secondAnimatedView,
-					transform: [{ translateY: contentTransition }],
-				}}
+				style={[
+					styles.secondAnimatedView,
+					{ transform: [{ translateY: contentTransition }] },
+				]}
 			>
 				<Home setUser={setUser} />
 			</Animated.View>
@@ -129,7 +142,6 @@ const AnimatedSplashScreen = ({ setUser }: AnimatedSplashScreenProps) => {
 
 const styles = StyleSheet.create({
 	outsideView: {
-		backgroundColor: '#F27649',
 		position: 'absolute',
 		top: 0,
 		bottom: 0,
@@ -138,7 +150,7 @@ const styles = StyleSheet.create({
 	},
 	splashView: {
 		flex: 1,
-		backgroundColor: BGColor,
+		backgroundColor: colors.main,
 		zIndex: 1,
 	},
 	animatedView: {
@@ -149,12 +161,12 @@ const styles = StyleSheet.create({
 	imageView: {
 		width: 150,
 		height: 150,
-		// marginBottom: 10,
 	},
 	textView: {
-		fontSize: 25,
+		fontSize: responsiveFontSize(25),
 		fontWeight: 'bold',
 		textAlign: 'center',
+		color: 'black',
 	},
 	secondAnimatedView: {
 		position: 'absolute',
