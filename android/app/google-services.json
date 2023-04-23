@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "277543865694-ftgo0s4lslulmj24fhcs47mlljcrotra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easenote",
+            "certificate_hash": "217e90a8a48fdf68163b5c452356923b5e9e2c0b"
+          }
+        },
+        {
           "client_id": "277543865694-t6p1hchsbdt7cnbac2jgp8rrg10vq5s2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,6 +45,13 @@
             {
               "client_id": "277543865694-ohns1g76ag2th2r2nrc7iu0obfk74vqk.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "277543865694-h3749tkqdasuqalndpibfqj5dff4mu7n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.EaseNote"
+              }
             }
           ]
         }

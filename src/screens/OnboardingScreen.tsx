@@ -14,6 +14,7 @@ import {
 	View,
 } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
+import Toast from 'react-native-root-toast';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SplashLogo from '../assets/images/customSplash.png';
@@ -114,6 +115,7 @@ const OnboardingScreen = ({ setUser }: OnboardingScreenProps) => {
 			return auth().signInWithCredential(googleCredential);
 		} catch (error) {
 			console.error('### Error: ', error);
+			return Toast.show(error.message);
 		}
 	};
 

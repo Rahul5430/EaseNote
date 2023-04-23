@@ -2,6 +2,7 @@ import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { RootSiblingParent } from 'react-native-root-siblings';
 import SplashScreen from 'react-native-splash-screen';
 
 import AnimatedSplashScreen from './src/screens/AnimatedSplashScreen';
@@ -17,11 +18,13 @@ export default function App() {
 	return (
 		<NavigationContainer>
 			<PaperProvider>
-				{!user ? (
-					<OnboardingScreen setUser={setUser} />
-				) : (
-					<AnimatedSplashScreen setUser={setUser} />
-				)}
+				<RootSiblingParent>
+					{!user ? (
+						<OnboardingScreen setUser={setUser} />
+					) : (
+						<AnimatedSplashScreen setUser={setUser} />
+					)}
+				</RootSiblingParent>
 			</PaperProvider>
 		</NavigationContainer>
 	);
