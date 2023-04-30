@@ -32,7 +32,7 @@ const Home = ({ setUser }: HomeScreenProps) => {
 	};
 
 	return (
-		<View style={{ flex: 1, marginTop: top + 60 }}>
+		<View style={{ flex: 1, marginTop: top + (top == 0 ? 60 : 45) }}>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				style={{ flexGrow: 1 }}
